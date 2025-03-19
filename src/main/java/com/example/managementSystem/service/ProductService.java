@@ -20,6 +20,16 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public Product updateProduct(Long id, Product updatedProduct) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+
+        product.setName(updatedProduct.getName());
+        product.setPrice(updatedProduct.getPrice());
+
+        return productRepository.save(product);
+    }
+
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
