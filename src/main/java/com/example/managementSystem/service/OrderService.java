@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -18,6 +20,7 @@ public class OrderService {
     private final UserService userService;
 
     public Order createOrder(Long userId, List<OrderItemRequest> orderItemsRequest) {
+        log.info("Создание заказа для пользователя ID: {}", userId);
         User user = userService.getUserById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -35,24 +38,29 @@ public class OrderService {
                 .orderItems(orderItems)
                 .build();
 
-        orderItems.forEach(item -> item.setOrder(order)); // Устанавливаем связь с заказом
+        orderItems.forEach(item -> item.setOrder(order));
+        log.info("Заказ ID: {} успешно создан", order.getId());
 
         return orderRepository.save(order);
     }
 
     public Optional<Order> getOrderById(Long id) {
+        log.info("Получение заказа по ID: {}", id);
         return orderRepository.findById(id);
     }
 
     public List<Order> getOrdersByUser(Long userId) {
         User user = userService.getUserById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        log.info("Получение заказов пользователя по ID: {}", userId);
         return orderRepository.findByUser(user);
     }
 
     public void deleteOrder(Long id) {
+        log.info("Отмена заказа ID: {}", id);
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
+        log.info("Заказ ID: {} отменён", id);
         orderRepository.delete(order);
     }
 }
