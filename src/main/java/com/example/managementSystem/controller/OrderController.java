@@ -1,7 +1,7 @@
 package com.example.managementSystem.controller;
 
+import com.example.managementSystem.dto.OrderItemRequest;
 import com.example.managementSystem.model.Order;
-import com.example.managementSystem.model.Product;
 import com.example.managementSystem.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestParam Long userId, @RequestBody List<Product> products) {
-        return ResponseEntity.ok(orderService.createOrder(userId, products));
+    public ResponseEntity<Order> createOrder(@RequestParam Long userId, @RequestBody List<OrderItemRequest> orderItems) {
+        return ResponseEntity.ok(orderService.createOrder(userId, orderItems));
     }
 
     @GetMapping("/{id}")
@@ -32,9 +32,9 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByUser(userId));
     }
 
-    @PutMapping("/{id}/cancel")
-    public ResponseEntity<Void> cancelOrder(@PathVariable Long id) {
-        orderService.cancelOrder(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
 }
