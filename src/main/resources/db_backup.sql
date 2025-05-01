@@ -21,6 +21,34 @@ SET row_security = off;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+CREATE TABLE public.users (
+                              id INTEGER PRIMARY KEY,
+                              email VARCHAR(255) NOT NULL,
+                              name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE public.orders (
+                               id INTEGER PRIMARY KEY,
+                               user_id INTEGER NOT NULL,
+                               FOREIGN KEY (user_id) REFERENCES public.users (id)
+);
+
+CREATE TABLE public.products (
+                                 id INTEGER PRIMARY KEY,
+                                 name VARCHAR(255) NOT NULL,
+                                 price NUMERIC(10, 2) NOT NULL
+);
+
+CREATE TABLE public.order_items (
+                                    id INTEGER PRIMARY KEY,
+                                    quantity INTEGER NOT NULL,
+                                    order_id INTEGER NOT NULL,
+                                    product_id INTEGER NOT NULL,
+                                    FOREIGN KEY (order_id) REFERENCES public.orders (id),
+                                    FOREIGN KEY (product_id) REFERENCES public.products (id)
+);
+
+
 INSERT INTO public.users (id, email, name) VALUES (1, 'veremienko.bogdan@gmail.com', 'Bogdan Veremienko');
 INSERT INTO public.users (id, email, name) VALUES (3, 'oleksandr.ivanenko@example.com', 'Олександр Іваненко');
 INSERT INTO public.users (id, email, name) VALUES (4, 'maria.petrenko@example.com', 'Марія Петренко');
@@ -73,35 +101,6 @@ INSERT INTO public.order_items (id, quantity, order_id, product_id) VALUES (6, 1
 INSERT INTO public.order_items (id, quantity, order_id, product_id) VALUES (7, 7, 6, 1);
 
 
---
--- Name: order_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
 
-SELECT pg_catalog.setval('public.order_items_id_seq', 7, true);
-
-
---
--- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.orders_id_seq', 6, true);
-
-
---
--- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.products_id_seq', 11, true);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.users_id_seq', 10, true);
-
-
---
--- PostgreSQL database dump complete
 --
 
